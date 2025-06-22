@@ -14,5 +14,5 @@ public:
 
 private:
     std::vector<char> grid;
-    int toIndex(int x, int y) const { return x * 3 + y; }  // Преобразование 2D в 1D
+    int toIndex(int x, int y) const { return x * 3 + y; } 
 };
