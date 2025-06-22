@@ -15,7 +15,4 @@ public:
 class AIPlayer : public Player {
 public:
     void makeMove(Board& board, char symbol) override;
-
-private:
-    int minimax(Board& board, int depth, bool isMaximizing, char aiSymbol) const;
 };
