@@ -1,11 +1,9 @@
 #include "board.h"
 
-Board::Board() {
-    grid.resize(3, std::vector<char>(3, ' '));
-}
+Board::Board() : grid(9, ' ') {}
 
 bool Board::isMoveValid(int x, int y) const {
-    return x >= 0 && x < 3 && y >= 0 && y < 3 && grid[x][y] == ' ';
+    return x >= 0 && x < 3 && y >= 0 && y < 3 && grid[toIndex(x, y)] == ' ';
 }
 
 void Board::makeMove(int x, int y, char player) {
@@ -21,7 +19,7 @@ void Board::makeMove(int x, int y, char player) {
         throw std::invalid_argument("Неверный символ игрока. Допустимы только 'X' и 'O'.");
     }
 
-    grid[x][y] = player;
+    grid[toIndex(x, y)] = player;
 }
 
 bool Board::isGameOver() const {
@@ -29,41 +27,50 @@ bool Board::isGameOver() const {
 }
 
 char Board::checkWinner() const {
+
     for (int i = 0; i < 3; ++i) {
-        if (grid[i][0] != ' ' && grid[i][0] == grid[i][1] && grid[i][1] == grid[i][2]) {
-            return grid[i][0];
+        if (grid[toIndex(i, 0)] != ' ' &&
+            grid[toIndex(i, 0)] == grid[toIndex(i, 1)] &&
+            grid[toIndex(i, 1)] == grid[toIndex(i, 2)]) {
+            return grid[toIndex(i, 0)];
         }
     }
+
 
     for (int j = 0; j < 3; ++j) {
-        if (grid[0][j] != ' ' && grid[0][j] == grid[1][j] && grid[1][j] == grid[2][j]) {
-            return grid[0][j];
+        if (grid[toIndex(0, j)] != ' ' &&
+            grid[toIndex(0, j)] == grid[toIndex(1, j)] &&
+            grid[toIndex(1, j)] == grid[toIndex(2, j)]) {
+            return grid[toIndex(0, j)];
         }
     }
 
-    if (grid[0][0] != ' ' && grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) {
-        return grid[0][0];
+
+    if (grid[toIndex(0, 0)] != ' ' &&
+        grid[toIndex(0, 0)] == grid[toIndex(1, 1)] &&
+        grid[toIndex(1, 1)] == grid[toIndex(2, 2)]) {
+        return grid[toIndex(0, 0)];
     }
-    if (grid[0][2] != ' ' && grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
-        return grid[0][2];
+    if (grid[toIndex(0, 2)] != ' ' &&
+        grid[toIndex(0, 2)] == grid[toIndex(1, 1)] &&
+        grid[toIndex(1, 1)] == grid[toIndex(2, 0)]) {
+        return grid[toIndex(0, 2)];
     }
 
     return ' ';
 }
 
 bool Board::isDraw() const {
-    for (const auto& row : grid) {
-        for (char cell : row) {
-            if (cell == ' ') return false;
-        }
+    for (char cell : grid) {
+        if (cell == ' ') return false;
     }
     return true;
 }
 
-const std::vector<std::vector<char>>& Board::getGrid() const {
+const std::vector<char>& Board::getGrid() const {
     return grid;
 }
 
 void Board::reset() {
-    grid = std::vector<std::vector<char>>(3, std::vector<char>(3, ' '));
+    grid = std::vector<char>(9, ' ');
 }
