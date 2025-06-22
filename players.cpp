@@ -31,9 +31,6 @@ void HumanPlayer::makeMove(Board& board, char symbol) {
     }
 }
 void AIPlayer::makeMove(Board& board, char symbol) {
-    if (symbol != 'X' && symbol != 'O') {
-        throw std::invalid_argument("AI может играть только 'X' или 'O'");
-    }
 
     char opponent = (symbol == 'O') ? 'X' : 'O';
 
@@ -75,33 +72,4 @@ void AIPlayer::makeMove(Board& board, char symbol) {
             return;
         }
     }
-}
-
-int AIPlayer::minimax(Board& board, int depth, bool isMaximizing, char aiSymbol) const {
-    char winner = board.checkWinner();
-    if (winner == aiSymbol) return 100;
-    if (winner != ' ' && winner != aiSymbol) return -100;
-    if (board.isDraw()) return 0;
-
-    char playerSymbol = isMaximizing ? aiSymbol : (aiSymbol == 'O' ? 'X' : 'O');
-    int bestScore = isMaximizing ? -std::numeric_limits<int>::max()
-                                : std::numeric_limits<int>::max();
-
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            if (board.isMoveValid(i, j)) {
-                Board tempBoard = board;
-                tempBoard.makeMove(i, j, playerSymbol);
-                int score = minimax(tempBoard, depth + 1, !isMaximizing, aiSymbol);
-
-                if (isMaximizing) {
-                    bestScore = std::max(score, bestScore);
-                } else {
-                    bestScore = std::min(score, bestScore);
-                }
-            }
-        }
-    }
-
-    return bestScore;
 }
