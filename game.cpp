@@ -109,7 +109,7 @@ void Game::printGrid() const {
     for (int i = 0; i < 3; ++i) {
         std::cout << i << " ";
         for (int j = 0; j < 3; ++j) {
-            char cell = grid[i][j];
+            char cell = grid[i * 3 + j];
             std::cout << (cell == ' ' ? '.' : cell) << " ";
         }
         std::cout << "\n";
